@@ -1,0 +1,43 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Forecast</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="{% static 'css/forecast.css' %}">
+  <script src="{% static 'js/jquery.cookie.js' %}"></script>
+</head>
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="{% url 'forecast:home' %}">Forecast</a>
+    </div>
+    <ul class="nav navbar-nav">
+      <li class="active"><a href="{% url 'forecast:home' %}">Home</a></li>
+    </ul>
+    <h3 id="timer" style="color:green;" class="navbar-text navbar-center"></h3>
+    <form method="post" action="{% url 'forecast:update' %}" class="navbar-form navbar-right">
+     {% csrf_token %}
+      <div class="form-group">
+        <input type="text" class="form-control" name="city" value="{{city}}" placeholder="Enter City">
+      </div>
+      <button type="submit" class="btn btn-success">Get Forecast</button>
+    </form>
+  </div>
+</nav>
+<br />
+<div id="container">
+{% block content %}
+{% endblock %}
+</div>
+<script>
+setInterval(function() {
+var d = new Date()
+document.getElementById("timer").innerHTML = d.toLocaleTimeString();
+},1000)
+</script>
+</html>

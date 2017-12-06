@@ -1,0 +1,103 @@
+{% extends 'forecast/base.html' %}
+{% block content %}
+{% load static %}
+<h3 id="message" style="color:blue; text-align:center;">5-Day Forecast Description for {{ city|upper }}</h3>
+{% for i in 'xxxxx' %}
+<div class="col-sm-4">
+<h3 id="date{{forloop.counter}}" style="text-align:center; color:green;"></h3>
+<div id="div{{forloop.counter}}" class="jumbotron" style="text-align:center; color:green; font-size:2em;">
+<img id="image{{forloop.counter}}" src="" height="90" width="90">
+<h3 id="head{{forloop.counter}}"></h3>
+</div>
+</div>
+{% endfor %}
+<div id="mydata"></div>
+<script>
+$(document).ready(function() {
+var $target = $("#mydata");
+$.ajax({
+    url: 'http://api.openweathermap.org/data/2.5/forecast?q={{city}}&APPID=cd8dfe4e5952bf443370e3124fa13eaf',
+    type: 'get', // This is the default though, you don't actually need to always mention it
+    success: function(data) {
+        var l = 0;
+        l = data.cnt;
+        k = Math.floor(l/5);
+        var resp = data.cod;
+        sessionStorage.setItem('mydata', JSON.stringify(data));
+        if (l == 0 ) {
+        $("#message").html("City not Found");
+         }
+        else {
+        var day1 = data.list[l-1-32].weather[0].description
+        var icon1 = data.list[l-1-32].weather[0].icon;
+        var icon1path = "{% static 'images/icons/' %}" + icon1 + ".svg";
+        var dateoneclass = data.list[l-1-32].dt_txt;
+        sessionStorage.setItem("date1", dateoneclass);
+        var dateone = dateoneclass.slice(0,11);
+        $("#date1").html(dateone);
+        $("#head1").html(day1);
+        $("#image1").attr('src',icon1path);
+
+        var day2 = data.list[l-1-24].weather[0].description
+        var icon2 = data.list[l-1-24].weather[0].icon;
+        var icon2path = "{% static 'images/icons/' %}" + icon2 + ".svg";
+        var datetwoclass = data.list[l-1-24].dt_txt;
+        sessionStorage.setItem("date2", datetwoclass);
+        var datetwo = datetwoclass.slice(0,11);
+        $("#date2").html(datetwo);
+        $("#head2").html(day2);
+        $("#image2").attr('src', icon2path);
+
+        var day3 = data.list[l-1-16].weather[0].description
+        var icon3 = data.list[l-1-16].weather[0].icon;
+        var icon3path = "{% static 'images/icons/' %}" + icon3 + ".svg";
+        var datethreeclass = data.list[l-1-16].dt_txt;
+        sessionStorage.setItem("date3", datethreeclass);
+        var datethree = datethreeclass.slice(0,11);
+        $("#date3").html(datethree);
+        $("#head3").html(day3);
+        $("#image3").attr('src', icon3path);
+
+        var day4 = data.list[l-1-8].weather[0].description
+        var icon4 = data.list[l-1-8].weather[0].icon;
+        var icon4path = "{% static 'images/icons/' %}" + icon4 + ".svg";
+        var datefourclass = data.list[l-1-8].dt_txt;
+        sessionStorage.setItem("date4", datefourclass);
+        var datefour = datefourclass.slice(0,11);
+        $("#date4").html(datefour);
+        $("#head4").html(day4);
+        $("#image4").attr('src', icon4path);
+
+        var day5 = data.list[l-1].weather[0].description
+        var icon5 = data.list[l-1].weather[0].icon;
+        var icon5path = "{% static 'images/icons/' %}" + icon5 + ".svg";
+        var datefiveclass = data.list[l-1].dt_txt;
+        sessionStorage.setItem("date5", datefiveclass);
+        var datefive = datefiveclass.slice(0,11);
+        $("#date5").html(datefive);
+        $("#head5").html(day5);
+        $("#image5").attr('src', icon5path);
+        }
+    },
+    failure: function(data) { 
+        alert('Got an error dude');
+    }
+});
+})
+</script>
+<script>
+$(document).ready(function() {
+$(".jumbotron").css('cursor','pointer');
+$(".jumbotron").click(function() {
+mydiv = $(this).attr('id').slice(-1);
+somedate = "date" + mydiv;
+mydate = sessionStorage.getItem(somedate);
+year = mydate.slice(0,4);
+month = mydate.slice(5,7);
+day = mydate.slice(8,10);
+time = mydate.slice(11,20);
+window.location.href = '/detail/' + mydiv + '/' + year+'/'+month+'/'+day+'/'+time
+});
+})
+</script>
+{% endblock%}

@@ -1,0 +1,82 @@
+{% extends 'forecast/base.html' %}
+{% block content %}
+
+<h3 id="message" style="color:blue; text-align:center;">Detailed Weather on {{tada}}</h3>
+<div class="jumbotron" style="text-align:center; color:green;">
+<p id="mintemp"></p>
+<p id="maxtemp"></p>
+<p id="humidity"></p>
+<p id="pressure"></p>
+<p id="wind"></p>
+</div>
+<div class="container">                  
+  <ul class="pager">
+    <li><a href="" onclick="goBack()">Back</a></li>
+    <li><a href="{% url 'forecast:home' %}">Home</a></li>
+  </ul>
+</div>
+<script>
+$(document).ready(function() {
+var data = JSON.parse(sessionStorage.getItem('mydata'));
+l = data.cnt;
+switch ({{div}}) {
+case 1:
+    mintempk = parseInt(data.list[l-1-32].main.temp_min) - 273.15;
+    maxtempk = parseInt(data.list[l-1-32].main.temp_max) - 273.15;
+    mintemp = mintempk.toFixed(2);
+    maxtemp = maxtempk.toFixed(2);
+    humidity = data.list[l-1-32].main.humidity;
+    pressure = data.list[l-1-32].main.pressure;
+    wind = data.list[l-1-32].wind.speed;
+    break;
+case 2:
+    mintempk = parseInt(data.list[l-1-24].main.temp_min) - 273.15;
+    maxtempk = parseInt(data.list[l-1-24].main.temp_max) - 273.15;
+    mintemp = mintempk.toFixed(2);
+    maxtemp = maxtempk.toFixed(2);
+    humidity = data.list[l-1-24].main.humidity;
+    pressure = data.list[l-1-24].main.pressure;
+    wind = data.list[l-1-24].wind.speed;
+    break;
+case 3:
+    mintempk = parseInt(data.list[l-1-16].main.temp_min) - 273.15;
+    maxtempk = parseInt(data.list[l-1-16].main.temp_max) - 273.15;
+    mintemp = mintempk.toFixed(2);
+    maxtemp = maxtempk.toFixed(2);
+    humidity = data.list[l-1-16].main.humidity;
+    pressure = data.list[l-1-16].main.pressure;
+    wind = data.list[l-1-16].wind.speed;
+    break;
+case 4:
+    mintempk = parseInt(data.list[l-1-8].main.temp_min) - 273.15;
+    maxtempk = parseInt(data.list[l-1-8].main.temp_max) - 273.15;
+    mintemp = mintempk.toFixed(2);
+    maxtemp = maxtempk.toFixed(2);
+    humidity = data.list[l-1-8].main.humidity;
+    pressure = data.list[l-1-8].main.pressure;
+    wind = data.list[l-1-8].wind.speed;
+    break;
+case 5:
+    mintempk = parseInt(data.list[l-1].main.temp_min) - 273.15;
+    maxtempk = parseInt(data.list[l-1].main.temp_max) - 273.15;
+    mintemp = mintempk.toFixed(2);
+    maxtemp = maxtempk.toFixed(2);
+    humidity = data.list[l-1].main.humidity;
+    pressure = data.list[l-1].main.pressure;
+    wind = data.list[l-1].wind.speed;
+    break;
+}
+$("#mintemp").html("Temprature(Min.)     " + mintemp);
+$("#maxtemp").html("Temperature(Max.)     " + maxtemp);
+$("#humidity").html("Humidity     " + humidity);
+$("#pressure").html("Pressure     " + pressure);
+$("#wind").html("Wind Speed     " + wind);
+
+})
+</script>
+<script>
+function goBack() {
+window.history.back();
+}
+</script>
+{% endblock%}
